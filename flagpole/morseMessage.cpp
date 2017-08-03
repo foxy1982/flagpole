@@ -1,6 +1,6 @@
 #include "NeoPixelBus.h"
 
-String message = "... --- ...";
+String message = ".... .- .--. .--. -.--   -... .. .-. - .... -.. .- -.--   -.- .- .-. .-..";
 
 void Pad(String *message, uint8_t padCount)
 {
@@ -33,6 +33,7 @@ void ConvertToBoolArray(String message, bool *outputArray)
     }
     outputArray[arrayCounter] = false;
     arrayCounter++;
+    Serial.println(arrayCounter);
   } 
 }
 
@@ -59,7 +60,7 @@ void MorseMessage(NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> &strip, HslColor 
   fullMessage += message;
   Pad(&fullMessage, pixelCount);
 
-  uint8_t boolArrayLength = (2 * pixelCount) + (2* message.length()) + CountNumberOfHyphens(message) - 1;
+  uint16_t boolArrayLength = (2 * pixelCount) + (2 * message.length()) + CountNumberOfHyphens(message) - 1;
 
   bool boolArray[boolArrayLength];
 
