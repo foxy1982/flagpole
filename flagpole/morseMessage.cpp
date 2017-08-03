@@ -2,7 +2,7 @@
 
 String message = ".... .- .--. .--. -.--   -... .. .-. - .... -.. .- -.--   -.- .- .-. .-..";
 
-void Pad(String *message, uint8_t padCount)
+void Pad(String *message, int padCount)
 {
   for (int i = 0; i < padCount; i++)
   {
@@ -12,7 +12,7 @@ void Pad(String *message, uint8_t padCount)
 
 void ConvertToBoolArray(String message, bool *outputArray)
 {
-  uint8_t arrayCounter = 0;
+  int arrayCounter = 0;
 
   for (int i = 0; i < message.length(); i++)
   {
@@ -33,23 +33,22 @@ void ConvertToBoolArray(String message, bool *outputArray)
     }
     outputArray[arrayCounter] = false;
     arrayCounter++;
-    Serial.println(arrayCounter);
   } 
+  Serial.println(arrayCounter);
 }
 
-uint8_t CountNumberOfHyphens(String message)
+int CountNumberOfCharacters(String message, char character)
 {
-  uint8_t count = 0;
+  int count = 0;
 
   for (int i = 0; i < message.length(); i++)
   {
-    if (message.charAt(i) == '-')
+    if (message.charAt(i) == character)
     {
       count++;
     }
   }
-
-  return count;
+  return count;  
 }
 
 void MorseMessage(NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> &strip, HslColor backgroundColour, HslColor foregroundColour, uint8_t pixelCount)
@@ -60,11 +59,42 @@ void MorseMessage(NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> &strip, HslColor 
   fullMessage += message;
   Pad(&fullMessage, pixelCount);
 
-  uint16_t boolArrayLength = (2 * pixelCount) + (2 * message.length()) + CountNumberOfHyphens(message) - 1;
+  int numberOfSpaces = CountNumberOfCharacters(fullMessage, ' ');
+  Serial.print("numberOfSpaces: ");
+  Serial.println(numberOfSpaces);
 
+  int numberOfDots = CountNumberOfCharacters(fullMessage, '.');
+  Serial.print("numberOfDots: ");
+  Serial.println(numberOfDots);
+
+  int numberOfDashes = CountNumberOfCharacters(fullMessage, '-');
+  Serial.print("numberOfDashes: ");
+  Serial.println(numberOfDashes);
+  
+  int boolArrayLength = numberOfSpaces + (2 * numberOfDots) + (3 * numberOfDashes);
+/*
+  Serial.println(fullMessage);
+  Serial.print("message.length(): ");
+  Serial.println(message.length());
+  Serial.print("fullMessage.length(): ");
+  Serial.println(fullMessage.length());
+  Serial.print("boolArrayLength: ");
+  Serial.println(boolArrayLength);
+  */
   bool boolArray[boolArrayLength];
 
   ConvertToBoolArray(fullMessage, boolArray);
+
+  Serial.println();
+  for (int i = 0; i < boolArrayLength; i++)
+  {
+    if (boolArray[i]) {
+      Serial.print(1);
+    } else {
+      Serial.print(0);
+    }
+  }
+  Serial.println();
 
   for (int frameCounter = 0; frameCounter < boolArrayLength - pixelCount; frameCounter++)
   {
@@ -77,7 +107,7 @@ void MorseMessage(NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> &strip, HslColor 
       }
     }
     strip.Show();
-    delay(1000);
+    delay(500);
   }
 }
 

@@ -9,7 +9,7 @@
 const uint16_t PixelCount = 90; 
 const uint8_t PixelPin = 6;  // make sure to set this to the correct pin, ignored for Esp8266
 
-HslColor _colourList[] = { hslRed, hslYellow, hslBlue };
+HslColor _colourList[] = { hslYellow, hslRed, hslGreen };
 const uint8_t ColourCount = 3;
 
 // three element pixels, in different order and speeds
@@ -30,8 +30,8 @@ void setup()
 
 void loop()
 {
+  SimpleChange(_strip, _colourList, ColourCount);
+  FillWithStripes(_strip, _colourList, ColourCount, hslBlack, PixelCount);
+  FlashColours(_strip, _colourList, ColourCount, hslBlack);
   MorseMessage(_strip, hslBlack, hslBlue, PixelCount);
-    //SimpleChange(_strip, _colourList, ColourCount);
-    //FlashColours(_strip, _colourList, ColourCount, hslBlack);
-    //FillWithStripes(_strip, _colourList, ColourCount, hslBlack, PixelCount);
 }
