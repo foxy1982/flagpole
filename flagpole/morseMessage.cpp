@@ -1,6 +1,8 @@
 #include "NeoPixelBus.h"
 
 String message = ".... .- .--. .--. -.--   -... .. .-. - .... -.. .- -.--   -.- .- .-. .-..";
+//String message = ".... .- .--. .--. -.--   -... .. .-. - .... -.. .- -.--";
+
 
 void Pad(String *message, int padCount)
 {
@@ -10,13 +12,15 @@ void Pad(String *message, int padCount)
   }
 }
 
-void ConvertToBoolArray(String message, bool *outputArray)
+void ConvertToBoolArray(String *message, bool *outputArray)
 {
   int arrayCounter = 0;
 
-  for (int i = 0; i < message.length(); i++)
+  Serial.println(*message);
+
+  for (int i = 0; i < message->length(); i++)
   {
-    switch (message[i])
+    switch ((*message)[i])
     {
       case ' ':
         break;
@@ -51,7 +55,7 @@ int CountNumberOfCharacters(String message, char character)
   return count;  
 }
 
-void MorseMessage(NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> &strip, HslColor backgroundColour, HslColor foregroundColour, uint8_t pixelCount)
+void MorseMessage(NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> &strip, HslColor backgroundColour, HslColor foregroundColour, uint8_t startPixel, uint8_t pixelCount)
 {
   String fullMessage = "";
 
@@ -72,7 +76,7 @@ void MorseMessage(NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> &strip, HslColor 
   Serial.println(numberOfDashes);
   
   int boolArrayLength = numberOfSpaces + (2 * numberOfDots) + (3 * numberOfDashes);
-/*
+
   Serial.println(fullMessage);
   Serial.print("message.length(): ");
   Serial.println(message.length());
@@ -80,10 +84,11 @@ void MorseMessage(NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> &strip, HslColor 
   Serial.println(fullMessage.length());
   Serial.print("boolArrayLength: ");
   Serial.println(boolArrayLength);
-  */
+  
   bool boolArray[boolArrayLength];
 
-  ConvertToBoolArray(fullMessage, boolArray);
+  Serial.println(fullMessage);
+  ConvertToBoolArray(&fullMessage, boolArray);
 
   Serial.println();
   for (int i = 0; i < boolArrayLength; i++)
@@ -103,7 +108,7 @@ void MorseMessage(NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> &strip, HslColor 
     {
       if (boolArray[frameCounter + i])
       {
-        strip.SetPixelColor(i, foregroundColour);
+        strip.SetPixelColor(startPixel + i, foregroundColour);
       }
     }
     strip.Show();

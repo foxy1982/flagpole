@@ -1,1 +1,1 @@
-void FlashColours(NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> &, HslColor[], uint8_t, HslColor);
+void FlashColours(NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> &, HslColor[], uint8_t, HslColor, uint8_t, uint8_t);
