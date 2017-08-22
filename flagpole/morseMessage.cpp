@@ -1,8 +1,8 @@
 #include "NeoPixelBus.h"
 
-String message = ".... .- .--. .--. -.--   -... .. .-. - .... -.. .- -.--   -.- .- .-. .-..";
-//String message = ".... .- .--. .--. -.--   -... .. .-. - .... -.. .- -.--";
+String message = ".";
 
+uint16_t delayMs = 100;
 
 void Pad(String *message, int padCount)
 {
@@ -112,7 +112,7 @@ void MorseMessage(NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> &strip, HslColor 
       }
     }
     strip.Show();
-    delay(500);
+    delay(delayMs);
   }
 }
 
